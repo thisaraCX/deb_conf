@@ -20,8 +20,8 @@ services:
     environment:
       - TZ=Australia/Sydney
       - NODE_ENV=production
-    env_file:
-      - ./global.env
+    #env_file:
+    #  - ./global.env
     volumes:
       - ./node-red-data:/data
   
