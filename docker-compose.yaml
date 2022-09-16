@@ -1,0 +1,42 @@
+version: '3'
+services:
+  influxdb:
+    image: influxdb:2.3
+    ports:
+      - 8086:8086
+    environment:
+      - INFLUXDB_LOGGING_LEVEL=error
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_data:/etc/influxdb2
+      - influxdb_data:/influxdb2
+
+  nodered:
+    image: nodered/node-red:3.0.1-1-16
+    depends_on:
+      - influxdb
+    ports:
+      - 8084:1880
+    environment:
+      - TZ=Australia/Sydney
+      - NODE_ENV=production
+    env_file:
+      - ./global.env
+    volumes:
+      - ./node-red-data:/data
+  
+  grafana:
+    # credentials are admin/gelion
+    image: grafana/grafana:9.0.2
+    depends_on:
+      - influxdb
+    ports:
+      - 8085:3000
+    environment:
+      - GF_LOG_LEVEL=error
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  influxdb_data:
+  grafana_data:
